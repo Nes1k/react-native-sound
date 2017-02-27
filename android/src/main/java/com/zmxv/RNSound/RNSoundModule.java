@@ -1,9 +1,11 @@
 package com.zmxv.RNSound;
 
 import android.media.MediaPlayer;
+import android.media.AudioManager;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.net.Uri;
+import android.content.Context;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
@@ -120,10 +122,20 @@ public class RNSoundModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void setVolume(final Integer key, final Float left, final Float right) {
+    this.setMaxVolume();
     MediaPlayer player = this.playerPool.get(key);
     if (player != null) {
       player.setVolume(left, right);
     }
+  }
+
+  @ReactMethod
+  public void setMaxVolume() {
+    AudioManager AudioManager = (AudioManager) this.context.getSystemService (Context.AUDIO_SERVICE);
+    int musicVolume = AudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+    AudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+                                    AudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
+                                    AudioManager.FLAG_SHOW_UI);
   }
 
   @ReactMethod
