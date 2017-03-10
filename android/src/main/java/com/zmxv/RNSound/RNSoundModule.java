@@ -125,7 +125,11 @@ public class RNSoundModule extends ReactContextBaseJavaModule {
     this.setMaxVolume();
     MediaPlayer player = this.playerPool.get(key);
     if (player != null) {
-      player.setVolume(left, right);
+      AudioManager AudioManager = (AudioManager) this.context.getSystemService (Context.AUDIO_SERVICE);
+      float musicVolume = AudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) * left;
+      AudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+                                            (int)Math.round(musicVolume),
+                                            AudioManager.FLAG_SHOW_UI);
     }
   }
 
